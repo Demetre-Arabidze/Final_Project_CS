@@ -10,46 +10,43 @@ namespace Book_App.Repositories
     {
         private readonly string filePath;
 
-        public FileBookRepository()
-        {
-            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-
-            filePath = Path.Combine(baseDir, "books.json");
-        }
-
-        private JsonSerializerOptions options = new()
+        private readonly JsonSerializerOptions options = new()
         {
             WriteIndented = true,
             Converters = { new JsonStringEnumConverter() }
         };
 
-        public List<Book> GetAll()
+        public FileBookRepository()
+        {
+            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            filePath = Path.Combine(baseDir, "books.json");
+        }
+
+        public async Task<List<Book>> GetAllAsync()
         {
             if (!File.Exists(filePath))
                 return new List<Book>();
 
-            var json = File.ReadAllText(filePath);
+            var json = await File.ReadAllTextAsync(filePath);
 
             if (string.IsNullOrWhiteSpace(json))
                 return new List<Book>();
 
-            return JsonSerializer.Deserialize<List<Book>>(json, options)
-                   ?? new List<Book>();
+            return JsonSerializer.Deserialize<List<Book>>(json, options) ?? new List<Book>();
         }
 
-        public void Add(Book book)
+        public async Task AddAsync(Book book)
         {
-            var books = GetAll();
-
-            book.Id = GetNextId(books);
+            var books = await GetAllAsync();
+            book.Id = books.Count == 0 ? 1 : books.Max(b => b.Id) + 1;
 
             books.Add(book);
-            Save(books);
+            await SaveAsync(books);
         }
 
-        public void Update(int id, Book updatedBook)
+        public async Task UpdateAsync(int id, Book updatedBook)
         {
-            var books = GetAll();
+            var books = await GetAllAsync();
 
             var book = books.FirstOrDefault(b => b.Id == id);
 
@@ -60,61 +57,60 @@ namespace Book_App.Repositories
                 book.Year = updatedBook.Year;
                 book.Genre = updatedBook.Genre;
 
-                Save(books);
+                await SaveAsync(books);
             }
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            var books = GetAll();
+            var books = await GetAllAsync();
 
             var book = books.FirstOrDefault(b => b.Id == id);
 
             if (book != null)
             {
                 books.Remove(book);
-                Save(books);
+                await SaveAsync(books);
             }
         }
 
-        public Book FindById(int id)
-            => GetAll().FirstOrDefault(b => b.Id == id);
+        public async Task<Book> FindByIdAsync(int id)
+            => (await GetAllAsync()).FirstOrDefault(b => b.Id == id);
 
-        public List<Book> FindByAuthor(string author)
-            => GetAll()
+        public async Task<List<Book>> FindByAuthorAsync(string author)
+            => (await GetAllAsync())
                 .Where(b => b.Author.Contains(author, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
-        public List<Book> FindByYear(int year)
-            => GetAll().Where(b => b.Year == year).ToList();
+        public async Task<List<Book>> FindByYearAsync(int year)
+            => (await GetAllAsync()).Where(b => b.Year == year).ToList();
 
-        public List<Book> FindByGenre(Genre genre)
-            => GetAll().Where(b => b.Genre == genre).ToList();
+        public async Task<List<Book>> FindByGenreAsync(Genre genre)
+            => (await GetAllAsync()).Where(b => b.Genre == genre).ToList();
 
-        public Book FindByTitle(string title)
-            => GetAll().FirstOrDefault(b =>
-                b.Title.Contains(title, StringComparison.OrdinalIgnoreCase));
+        public async Task<Book> FindByTitleAsync(string title)
+            => (await GetAllAsync())
+                .FirstOrDefault(b => b.Title.Contains(title, StringComparison.OrdinalIgnoreCase));
 
-        public void AddRating(int id, int rating)
+        public async Task AddRatingAsync(int id, int rating)
         {
-            var books = GetAll();
+            var books = await GetAllAsync();
 
             var book = books.FirstOrDefault(b => b.Id == id);
 
             if (book != null)
             {
+                book.Ratings ??= new List<int>();
                 book.Ratings.Add(rating);
-                Save(books);
+
+                await SaveAsync(books);
             }
         }
 
-        private int GetNextId(List<Book> books)
-            => books.Count == 0 ? 1 : books.Max(b => b.Id) + 1;
-
-        private void Save(List<Book> books)
+        private async Task SaveAsync(List<Book> books)
         {
             var json = JsonSerializer.Serialize(books, options);
-            File.WriteAllText(filePath, json);
+            await File.WriteAllTextAsync(filePath, json);
         }
     }
 }

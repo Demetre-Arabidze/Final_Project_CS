@@ -203,7 +203,7 @@
             button13.Name = "button13";
             button13.Size = new Size(130, 87);
             button13.TabIndex = 13;
-            button13.Text = "X";
+            button13.Text = "*";
             button13.UseVisualStyleBackColor = true;
             button13.Click += Operation_Click;
             // 

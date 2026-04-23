@@ -1,6 +1,7 @@
 ﻿using Book_App.Models;
 using Book_App.Services;
 using Book_App_Repository.Models.Enums;
+using Book_App_Services.DTOs;
 
 namespace Book_App.UI
 {
@@ -13,7 +14,7 @@ namespace Book_App.UI
             this.manager = manager;
         }
 
-        public void Start()
+        public async Task StartAsync()
         {
             while (true)
             {
@@ -33,12 +34,12 @@ namespace Book_App.UI
 
                     switch (choice)
                     {
-                        case "1": AddBook(); break;
-                        case "2": ShowAllBooks(); break;
-                        case "3": SearchBook(); break;
-                        case "4": UpdateBook(); break;
-                        case "5": DeleteBook(); break;
-                        case "6": RateBook(); break;
+                        case "1": await AddBook(); break;
+                        case "2": await ShowAllBooks(); break;
+                        case "3": await SearchBook(); break;
+                        case "4": await UpdateBook(); break;
+                        case "5": await DeleteBook(); break;
+                        case "6": await RateBook(); break;
                         case "7": return;
                         default: Console.WriteLine("Invalid option!"); break;
                     }
@@ -50,53 +51,57 @@ namespace Book_App.UI
             }
         }
 
-        private void AddBook()
+        private async Task AddBook()
         {
             Console.Write("Title: ");
             string title = Console.ReadLine();
 
+            while (string.IsNullOrWhiteSpace(title))
+            {
+                Console.Write("Title cannot be empty: ");
+                title = Console.ReadLine();
+            }
+
             Console.Write("Author: ");
             string author = Console.ReadLine();
 
-            int year;
+            while (string.IsNullOrWhiteSpace(author))
+            {
+                Console.Write("Author cannot be empty: ");
+                author = Console.ReadLine();
+            }
+
             Console.Write("Year: ");
+            int year;
             while (!int.TryParse(Console.ReadLine(), out year))
-                Console.WriteLine("Invalid year. Try again:");
+                Console.Write("Invalid year: ");
 
             foreach (var g in Enum.GetValues(typeof(Genre)))
                 Console.WriteLine($"{(int)g} - {g}");
 
             Console.Write("Select Genre: ");
-
             int genreChoice;
+
             while (!int.TryParse(Console.ReadLine(), out genreChoice) ||
                    !Enum.IsDefined(typeof(Genre), genreChoice))
+                Console.Write("Invalid genre: ");
+
+            var dto = new CreateBookDto
             {
-                Console.WriteLine("Invalid genre. Try again:");
-            }
+                Title = title,
+                Author = author,
+                Year = year,
+                Genre = (Genre)genreChoice
+            };
 
-            Genre genre = (Genre)genreChoice;
-
-            var book = new Book(0, title, author, year, genre);
-
-            manager.AddBook(book);
+            await manager.AddBook(dto);
 
             Console.WriteLine("Book added successfully!");
         }
 
-        private void ShowAllBooks()
+        private async Task ShowAllBooks()
         {
-            Console.WriteLine("\n--- View All Books ---");
-            Console.WriteLine("1. By ID");
-            Console.WriteLine("2. By Year ASC");
-            Console.WriteLine("3. By Year DESC");
-            Console.WriteLine("4. By Rating DESC");
-            Console.WriteLine("5. By Rating ASC");
-            Console.Write("Choose option: ");
-
-            string choice = Console.ReadLine();
-
-            var books = manager.GetAllBooks();
+            var books = await manager.GetAllBooks();
 
             if (books.Count == 0)
             {
@@ -104,22 +109,30 @@ namespace Book_App.UI
                 return;
             }
 
-            List<Book> sortedBooks = choice switch
+            Console.WriteLine("\n--- View All Books ---");
+            Console.WriteLine("1. By ID");
+            Console.WriteLine("2. By Year ASC");
+            Console.WriteLine("3. By Year DESC");
+            Console.WriteLine("4. By Rating DESC");
+            Console.WriteLine("5. By Rating ASC");
+
+            string choice = Console.ReadLine();
+
+            var sorted = choice switch
             {
-                "1" => books.OrderBy(b => b.Id).ToList(),
-                "2" => books.OrderBy(b => b.Year).ToList(),
-                "3" => books.OrderByDescending(b => b.Year).ToList(),
-                "4" => books.OrderByDescending(b => b.AverageRating).ToList(),
-                "5" => books.OrderBy(b => b.AverageRating).ToList(),
-                _ => books.OrderBy(b => b.Id).ToList()
+                "2" => books.OrderBy(b => b.Year),
+                "3" => books.OrderByDescending(b => b.Year),
+                "4" => books.OrderByDescending(b => b.AverageRating),
+                "5" => books.OrderBy(b => b.AverageRating),
+                _ => books.OrderBy(b => b.Id)
             };
 
-            foreach (var book in sortedBooks)
+            foreach (var book in sorted)
                 Console.WriteLine(book);
         }
 
         #region
-        private void SearchBook()
+        private async Task SearchBook()
         {
             Console.WriteLine("\n--- Search Book ---");
             Console.WriteLine("1. By ID");
@@ -127,114 +140,50 @@ namespace Book_App.UI
             Console.WriteLine("3. By Author");
             Console.WriteLine("4. By Year");
             Console.WriteLine("5. By Genre");
-            Console.Write("Choose option: ");
 
+            Console.Write("Choose option: ");
             string choice = Console.ReadLine();
 
             switch (choice)
             {
-                case "1": SearchBookById(); break;
-                case "2": SearchBookByTitle(); break;
-                case "3": SearchBookByAuthor(); break;
-                case "4": SearchBookByYear(); break;
-                case "5": SearchByGenre(); break;
+                case "1": await SearchById(); break;
+                case "2": await SearchByTitle(); break;
+                case "3": await SearchByAuthor(); break;
+                case "4": await SearchByYear(); break;
+                case "5": await SearchByGenre(); break;
                 default: Console.WriteLine("Invalid option!"); break;
             }
         }
-        private void SearchBookByTitle()
-        {
-            Console.Write("Enter title: ");
-            string title = Console.ReadLine();
 
-            var book = manager.FindByTitle(title);
-
-            if (book == null)
-                Console.WriteLine("Book not found.");
-            else
-                Console.WriteLine(book);
-        }
-
-        private void SearchBookById()
+        private async Task SearchById()
         {
             Console.Write("Enter ID: ");
-
             int id;
+
             while (!int.TryParse(Console.ReadLine(), out id))
-            {
-                Console.WriteLine("Invalid ID. Try again:");
-            }
+                Console.Write("Invalid ID: ");
 
-            var book = manager.FindById(id);
+            var book = await manager.FindById(id);
 
-            if (book == null)
-                Console.WriteLine("Book not found.");
-            else
-                Console.WriteLine(book);
+            Console.WriteLine("Book Not found");
         }
 
-        private void SearchBookByAuthor()
+        private async Task SearchByTitle()
         {
-            Console.Write("Enter author: ");
+            Console.Write("Enter Title: ");
+            string title = Console.ReadLine();
+
+            var book = await manager.FindByTitle(title);
+
+            Console.WriteLine("Book Not found");
+        }
+
+        private async Task SearchByAuthor()
+        {
+            Console.Write("Enter Author: ");
             string author = Console.ReadLine();
 
-            var books = manager.FindByAuthor(author);
-
-            if (books.Count == 0)
-            {
-                Console.WriteLine("No books found for this author.");
-                return;
-            }
-
-            foreach (var book in books)
-            {
-                Console.WriteLine(book);
-            }
-        }
-
-        private void SearchBookByYear()
-        {
-            Console.Write("Enter year: ");
-
-            int year;
-            while (!int.TryParse(Console.ReadLine(), out year))
-            {
-                Console.WriteLine("Invalid year. Try again:");
-            }
-
-            var books = manager.FindByYear(year);
-
-            if (books.Count == 0)
-            {
-                Console.WriteLine("No books found for this year.");
-                return;
-            }
-
-            foreach (var book in books)
-            {
-                Console.WriteLine(book);
-            }
-        }
-
-        private void SearchByGenre()
-        {
-
-            foreach (var g in Enum.GetValues(typeof(Genre)))
-            {
-                Console.WriteLine($"{(int)g} - {g}");
-            }
-
-            Console.Write("Select Genre:");
-
-            int choice;
-            while (!int.TryParse(Console.ReadLine(), out choice) ||
-                   !Enum.IsDefined(typeof(Genre), choice))
-            {
-                Console.WriteLine("Invalid choice. Try again:");
-            }
-
-            var genre = (Genre)choice;
-
-            var books = manager.FindByGenre(genre);
+            var books = await manager.FindByAuthor(author);
 
             if (books.Count == 0)
             {
@@ -243,86 +192,125 @@ namespace Book_App.UI
             }
 
             foreach (var book in books)
-            {
                 Console.WriteLine(book);
-            }
-        }
-        #endregion
-
-        private void DeleteBook()
-        {
-            Console.Write("Enter id to delete: ");
-
-            int id;
-            while (!int.TryParse(Console.ReadLine(), out id))
-            {
-                Console.WriteLine("Invalid id. Try again:");
-            }
-
-            manager.DeleteBook(id);
-
-            Console.WriteLine("If book existed, it was deleted.");
         }
 
-        private void UpdateBook()
+        private async Task SearchByYear()
         {
-            Console.Write("Enter ID to update: ");
-
-            int id;
-            while (!int.TryParse(Console.ReadLine(), out id))
-                Console.WriteLine("Invalid ID. Try again:");
-
-            Console.Write("New Title: ");
-            string title = Console.ReadLine();
-
-            Console.Write("New Author: ");
-            string author = Console.ReadLine();
-
+            Console.Write("Enter Year: ");
             int year;
-            Console.Write("New Year: ");
-            while (!int.TryParse(Console.ReadLine(), out year))
-                Console.WriteLine("Invalid year. Try again:");
 
+            while (!int.TryParse(Console.ReadLine(), out year))
+                Console.Write("Invalid year: ");
+
+            var books = await manager.FindByYear(year);
+
+            if (books.Count == 0)
+            {
+                Console.WriteLine("No books found.");
+                return;
+            }
+
+            foreach (var book in books)
+                Console.WriteLine(book);
+        }
+
+        private async Task SearchByGenre()
+        {
             foreach (var g in Enum.GetValues(typeof(Genre)))
                 Console.WriteLine($"{(int)g} - {g}");
 
             Console.Write("Select Genre: ");
+            int choice;
 
-            int genreChoice;
-            while (!int.TryParse(Console.ReadLine(), out genreChoice) ||
-                   !Enum.IsDefined(typeof(Genre), genreChoice))
+            while (!int.TryParse(Console.ReadLine(), out choice) ||
+                   !Enum.IsDefined(typeof(Genre), choice))
+                Console.Write("Invalid genre: ");
+
+            var books = await manager.FindByGenre((Genre)choice);
+
+            if (books.Count == 0)
             {
-                Console.WriteLine("Invalid genre. Try again:");
+                Console.WriteLine("No books found.");
+                return;
             }
 
-            Genre genre = (Genre)genreChoice;
+            foreach (var book in books)
+                Console.WriteLine(book);
+        }
+        #endregion
 
-            var updatedBook = new Book(id, title, author, year, genre);
+        private async Task DeleteBook()
+        {
+            Console.Write("Enter ID: ");
+            int id;
 
-            manager.UpdateBook(id, updatedBook);
+            while (!int.TryParse(Console.ReadLine(), out id))
+                Console.Write("Invalid ID: ");
 
-            Console.WriteLine("Book updated successfully!");
+            await manager.DeleteBook(id);
+
+            Console.WriteLine("Deleted.");
         }
 
-        private void RateBook()
+        private async Task UpdateBook()
         {
-            Console.Write("Enter Book ID: ");
-
+            Console.Write("Enter ID: ");
             int id;
+
             while (!int.TryParse(Console.ReadLine(), out id))
+                Console.Write("Invalid ID: ");
+
+            Console.Write("Title: ");
+            string title = Console.ReadLine();
+
+            Console.Write("Author: ");
+            string author = Console.ReadLine();
+
+            Console.Write("Year: ");
+            int year;
+
+            while (!int.TryParse(Console.ReadLine(), out year))
+                Console.Write("Invalid year: ");
+
+            foreach (var g in Enum.GetValues(typeof(Genre)))
+                Console.WriteLine($"{(int)g} - {g}");
+
+            Console.Write("Genre: ");
+            int genreChoice;
+
+            while (!int.TryParse(Console.ReadLine(), out genreChoice) ||
+                   !Enum.IsDefined(typeof(Genre), genreChoice))
+                Console.Write("Invalid genre: ");
+
+            var dto = new UpdateBookDto
             {
-                Console.WriteLine("Invalid ID. Try again:");
-            }
+                Title = title,
+                Author = author,
+                Year = year,
+                Genre = (Genre)genreChoice
+            };
 
-            Console.Write("Enter rating (1-5): ");
+            await manager.UpdateBook(id, dto);
 
+            Console.WriteLine("Updated successfully!");
+        }
+
+        private async Task RateBook()
+        {
+            Console.Write("Enter ID: ");
+            int id;
+
+            while (!int.TryParse(Console.ReadLine(), out id))
+                Console.Write("Invalid ID: ");
+
+            Console.Write("Rating (1-5): ");
             int rating;
-            while (!int.TryParse(Console.ReadLine(), out rating) || rating < 1 || rating > 5)
-            {
-                Console.WriteLine("Invalid rating. Enter value between 1 and 5:");
-            }
 
-            manager.AddRating(id, rating);
+            while (!int.TryParse(Console.ReadLine(), out rating) || rating < 1 || rating > 5)
+                Console.Write("Invalid rating: ");
+
+            await manager.AddRating(id, rating);
 
             Console.WriteLine("Rating added!");
         }

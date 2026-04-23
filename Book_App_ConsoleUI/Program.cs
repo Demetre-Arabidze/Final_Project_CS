@@ -7,13 +7,13 @@ namespace Book_App_ConsoleUI
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            IBookRepository repo = new FileBookRepository();
+            var repo = new FileBookRepository();
             var manager = new BookManager(repo);
-
             var ui = new ConsoleUI(manager);
-            ui.Start();
+
+            await ui.StartAsync(); 
         }
     }
 }

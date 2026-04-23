@@ -5,18 +5,15 @@ namespace Book_App.Interfaces
 {
     public interface IBookRepository
     {
-        void Add(Book book);
-        List<Book> GetAll();
-
-        Book FindById(int id);
-        Book FindByTitle(string title);
-
-        List<Book> FindByAuthor(string author);
-        List<Book> FindByYear(int year);
-        List<Book> FindByGenre(Genre genre); 
-
-        void Delete(int id);
-        void Update(int id, Book updatedBook);
-        void AddRating(int id, int rating);
+        Task<List<Book>> GetAllAsync();
+        Task AddAsync(Book book);
+        Task UpdateAsync(int id, Book updatedBook);
+        Task DeleteAsync(int id);
+        Task<Book> FindByIdAsync(int id);
+        Task<List<Book>> FindByAuthorAsync(string author);
+        Task<List<Book>> FindByYearAsync(int year);
+        Task<List<Book>> FindByGenreAsync(Genre genre);
+        Task<Book> FindByTitleAsync(string title);
+        Task AddRatingAsync(int id, int rating);
     }
 }

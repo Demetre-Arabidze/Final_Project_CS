@@ -3,3 +3,4 @@ book=წიგნი
 dog=ძაღლი
 cat=კატა
 car=მანქანა
+building=შენობა

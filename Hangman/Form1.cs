@@ -1,3 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
+using System.Drawing;
+
 namespace Hangman
 {
     public partial class Form1 : Form
@@ -31,6 +37,36 @@ namespace Hangman
             StartGame();
         }
 
+        void StartGame()
+        {
+            if (words.Count == 0)
+            {
+                MessageBox.Show("No words available!");
+                return;
+            }
+
+            var randomPair = words.ElementAt(rand.Next(words.Count));
+
+            word = randomPair.Key;
+            hint = randomPair.Value;
+
+            display = new char[word.Length];
+
+            for (int i = 0; i < word.Length; i++)
+                display[i] = '_';
+
+            attemptsLeft = maxAttempts;
+
+            lblWord.Text = string.Join(" ", display);
+            lblAttempts.Text = "Attempts: " + attemptsLeft;
+            lblHint.Text = "";
+
+            btnHint.Enabled = true;
+
+            flpLetters.Controls.Clear();
+            CreateLetterButtons();
+        }
+
         void CreateLetterButtons()
         {
             for (char c = 'A'; c <= 'Z'; c++)
@@ -49,6 +85,8 @@ namespace Hangman
         private void LetterClick(object sender, EventArgs e)
         {
             Button btn = sender as Button;
+            if (btn == null) return;
+
             char guess = btn.Text[0];
 
             bool correct = false;
@@ -80,53 +118,19 @@ namespace Hangman
             CheckGameStatus();
         }
 
-        void StartGame()
-        {
-            var randomPair = words.ElementAt(rand.Next(words.Count));
-
-            word = randomPair.Key;
-            hint = randomPair.Value;
-
-            display = new char[word.Length];
-
-            for (int i = 0; i < word.Length; i++)
-            {
-                display[i] = '_';
-            }
-
-            attemptsLeft = maxAttempts;
-            lblAttempts.Text = "Attempts: " + attemptsLeft;
-
-            lblWord.Text = string.Join(" ", display);
-
-            lblHint.Text = "";
-
-            flpLetters.Controls.Clear();
-            CreateLetterButtons();
-        }
-
         void CheckGameStatus()
         {
             if (!display.Contains('_'))
             {
                 MessageBox.Show("You Win! Congrats!");
-                DisableAllButtons();
                 StartGame();
+                return;
             }
 
             if (attemptsLeft <= 0)
             {
                 MessageBox.Show("Game Over! Word was: " + word);
-                DisableAllButtons();
                 StartGame();
-            }
-        }
-
-        void DisableAllButtons()
-        {
-            foreach (Control c in flpLetters.Controls)
-            {
-                c.Enabled = false;
             }
         }
 
@@ -135,20 +139,13 @@ namespace Hangman
             StartGame();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblWord_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnHint_Click(object sender, EventArgs e)
         {
-            lblHint.Text = hint;
+            lblHint.Text = "Hint: " + hint;
             btnHint.Enabled = false;
         }
+
+        private void Form1_Load(object sender, EventArgs e) { }
+        private void lblWord_Click(object sender, EventArgs e) { }
     }
 }

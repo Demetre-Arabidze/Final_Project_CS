@@ -1,6 +1,7 @@
 ﻿using Book_App.Interfaces;
 using Book_App.Models;
 using Book_App_Repository.Models.Enums;
+using Book_App_Services.DTOs;
 
 namespace Book_App.Services
 {
@@ -13,34 +14,35 @@ namespace Book_App.Services
             this.repository = repository;
         }
 
-        public void AddBook(Book book)
-            => repository.Add(book);
+        public Task AddBook(CreateBookDto dto)
+            => repository.AddAsync(new Book(0, dto.Title, dto.Author, dto.Year, dto.Genre));
 
-        public List<Book> GetAllBooks()
-            => repository.GetAll();
+        public Task UpdateBook(int id, UpdateBookDto dto)
+            => repository.UpdateAsync(id, new Book(id, dto.Title, dto.Author, dto.Year, dto.Genre));
 
-        public Book FindById(int id)
-            => repository.FindById(id);
+        public Task<List<Book>> GetAllBooks()
+            => repository.GetAllAsync();
 
-        public Book FindByTitle(string title)
-            => repository.FindByTitle(title);
+        public Task<Book> FindById(int id)
+            => repository.FindByIdAsync(id);
 
-        public List<Book> FindByAuthor(string author)
-            => repository.FindByAuthor(author);
+        public Task DeleteBook(int id)
+            => repository.DeleteAsync(id);
 
-        public List<Book> FindByYear(int year)
-            => repository.FindByYear(year);
+        public Task AddRating(int id, int rating)
+            => repository.AddRatingAsync(id, rating);
 
-        public List<Book> FindByGenre(Genre genre)
-            => repository.FindByGenre(genre);
 
-        public void UpdateBook(int id, Book book)
-            => repository.Update(id, book);
+        public Task<Book> FindByTitle(string title)
+            => repository.FindByTitleAsync(title);
 
-        public void DeleteBook(int id)
-            => repository.Delete(id);
+        public Task<List<Book>> FindByAuthor(string author)
+            => repository.FindByAuthorAsync(author);
 
-        public void AddRating(int id, int rating)
-            => repository.AddRating(id, rating);
+        public Task<List<Book>> FindByYear(int year)
+            => repository.FindByYearAsync(year);
+
+        public Task<List<Book>> FindByGenre(Genre genre)
+            => repository.FindByGenreAsync(genre);
     }
 }
