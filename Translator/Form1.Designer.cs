@@ -51,16 +51,16 @@
             txtInput.Location = new Point(12, 113);
             txtInput.Multiline = true;
             txtInput.Name = "txtInput";
+            txtInput.PlaceholderText = "Enter Here";
             txtInput.Size = new Size(324, 160);
             txtInput.TabIndex = 2;
-            txtInput.Text = "Enter here";
             // 
             // btnTranslate
             // 
-            btnTranslate.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnTranslate.Location = new Point(344, 12);
+            btnTranslate.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnTranslate.Location = new Point(337, 12);
             btnTranslate.Name = "btnTranslate";
-            btnTranslate.Size = new Size(141, 45);
+            btnTranslate.Size = new Size(166, 45);
             btnTranslate.TabIndex = 3;
             btnTranslate.Text = "Translate";
             btnTranslate.UseVisualStyleBackColor = true;
@@ -92,7 +92,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(824, 454);
+            ClientSize = new Size(824, 299);
             Controls.Add(cmbTo);
             Controls.Add(lblResult);
             Controls.Add(btnTranslate);

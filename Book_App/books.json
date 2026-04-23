@@ -1,0 +1,189 @@
+[
+  {
+    "Id": 1,
+    "Title": "Clean Code",
+    "Author": "Robert C. Martin",
+    "Year": 2008,
+    "Genre": "Programming",
+    "Ratings": [
+      5,
+      5,
+      4,
+      5
+    ],
+    "AverageRating": 4.75
+  },
+  {
+    "Id": 2,
+    "Title": "The Pragmatic Programmer",
+    "Author": "Andrew Hunt",
+    "Year": 1999,
+    "Genre": "Programming",
+    "Ratings": [
+      5,
+      4,
+      5,
+      5
+    ],
+    "AverageRating": 4.75
+  },
+  {
+    "Id": 3,
+    "Title": "Design Patterns",
+    "Author": "Erich Gamma",
+    "Year": 1994,
+    "Genre": "Programming",
+    "Ratings": [
+      5,
+      4,
+      4
+    ],
+    "AverageRating": 4.333333333333333
+  },
+  {
+    "Id": 4,
+    "Title": "Refactoring",
+    "Author": "Martin Fowler",
+    "Year": 1999,
+    "Genre": "Programming",
+    "Ratings": [
+      5,
+      5,
+      5,
+      4
+    ],
+    "AverageRating": 4.75
+  },
+  {
+    "Id": 5,
+    "Title": "Domain-Driven Design",
+    "Author": "Eric Evans",
+    "Year": 2003,
+    "Genre": "Programming",
+    "Ratings": [
+      4,
+      5,
+      4
+    ],
+    "AverageRating": 4.333333333333333
+  },
+  {
+    "Id": 6,
+    "Title": "Head First Design Patterns",
+    "Author": "Eric Freeman",
+    "Year": 2004,
+    "Genre": "Programming",
+    "Ratings": [
+      4,
+      5,
+      4,
+      5
+    ],
+    "AverageRating": 4.5
+  },
+  {
+    "Id": 7,
+    "Title": "Code Complete",
+    "Author": "Steve McConnell",
+    "Year": 2004,
+    "Genre": "Programming",
+    "Ratings": [
+      5,
+      5,
+      5
+    ],
+    "AverageRating": 5
+  },
+  {
+    "Id": 8,
+    "Title": "You Don\u0027t Know JS",
+    "Author": "Kyle Simpson",
+    "Year": 2015,
+    "Genre": "Programming",
+    "Ratings": [
+      4,
+      4,
+      5
+    ],
+    "AverageRating": 4.333333333333333
+  },
+  {
+    "Id": 9,
+    "Title": "C# in Depth",
+    "Author": "Jon Skeet",
+    "Year": 2019,
+    "Genre": "Programming",
+    "Ratings": [
+      5,
+      5,
+      4
+    ],
+    "AverageRating": 4.666666666666667
+  },
+  {
+    "Id": 10,
+    "Title": "The Hobbit",
+    "Author": "J.R.R. Tolkien",
+    "Year": 1937,
+    "Genre": "Fantasy",
+    "Ratings": [
+      5,
+      5,
+      5,
+      4
+    ],
+    "AverageRating": 4.75
+  },
+  {
+    "Id": 11,
+    "Title": "1984",
+    "Author": "George Orwell",
+    "Year": 1949,
+    "Genre": "Fiction",
+    "Ratings": [
+      5,
+      5,
+      5
+    ],
+    "AverageRating": 5
+  },
+  {
+    "Id": 12,
+    "Title": "Sapiens",
+    "Author": "Yuval Noah Harari",
+    "Year": 2011,
+    "Genre": "History",
+    "Ratings": [
+      5,
+      4,
+      5
+    ],
+    "AverageRating": 4.666666666666667
+  },
+  {
+    "Id": 13,
+    "Title": "Brief Answers to the Big Questions",
+    "Author": "Stephen Hawking",
+    "Year": 2018,
+    "Genre": "Science",
+    "Ratings": [
+      4,
+      5,
+      4
+    ],
+    "AverageRating": 4.333333333333333
+  },
+  {
+    "Id": 14,
+    "Title": "Steve Jobs",
+    "Author": "Walter Isaacson",
+    "Year": 2011,
+    "Genre": "Biography",
+    "Ratings": [
+      5,
+      4,
+      5
+    ],
+    "AverageRating": 4.666666666666667
+  }
+]

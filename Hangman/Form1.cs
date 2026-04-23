@@ -99,7 +99,7 @@ namespace Hangman
 
             lblWord.Text = string.Join(" ", display);
 
-            lblHint.Text = hint;
+            lblHint.Text = "";
 
             flpLetters.Controls.Clear();
             CreateLetterButtons();
@@ -109,7 +109,7 @@ namespace Hangman
         {
             if (!display.Contains('_'))
             {
-                MessageBox.Show("You Win!");
+                MessageBox.Show("You Win! Congrats!");
                 DisableAllButtons();
                 StartGame();
             }
@@ -143,6 +143,12 @@ namespace Hangman
         private void lblWord_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnHint_Click(object sender, EventArgs e)
+        {
+            lblHint.Text = hint;
+            btnHint.Enabled = false;
         }
     }
 }

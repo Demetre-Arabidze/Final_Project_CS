@@ -2,7 +2,7 @@
 {
     public partial class Form1 : Form
     {
-        string _filePath = "C:\\Users\\arabi\\source\\repos\\Final_Project_C#\\Translator\\Dictionary.txt";
+        string _filePath = @"../../../Dictionary.txt";
 
         Dictionary<string, string> enToKa = new Dictionary<string, string>();
         Dictionary<string, string> kaToEn = new Dictionary<string, string>();
@@ -17,8 +17,8 @@
             cmbTo.Items.Add("Georgian");
             cmbTo.Items.Add("English");
 
-            cmbFrom.SelectedIndex = 0;
-            cmbTo.SelectedIndex = 1;
+            cmbFrom.SelectedIndex = 1;
+            cmbTo.SelectedIndex = 0;
 
             string[] lines = File.ReadAllLines(_filePath);
 
@@ -57,16 +57,66 @@
             if (from == "English" && to == "Georgian")
             {
                 if (enToKa.ContainsKey(input))
+                {
                     lblResult.Text = enToKa[input];
+                }
                 else
-                    lblResult.Text = "Word not found!";
+                {
+                    AddNewWord(input, from, to);
+                }
             }
             else if (from == "Georgian" && to == "English")
             {
                 if (kaToEn.ContainsKey(input))
+                {
                     lblResult.Text = kaToEn[input];
+                }
                 else
-                    lblResult.Text = "Word not found!";
+                {
+                    AddNewWord(input, from, to);
+                }
+            }
+            else
+            {
+                lblResult.Text = "Invalid language selection";
+            }
+        }
+        private void AddNewWord(string input, string from, string to)
+        {
+            DialogResult result = MessageBox.Show(
+                "Word not found! Do you want to add it?",
+                "Add Word",
+                MessageBoxButtons.YesNo
+            );
+
+            if (result == DialogResult.Yes)
+            {
+                string newTranslation = Microsoft.VisualBasic.Interaction.InputBox(
+                    "Enter translation:",
+                    "New Word"
+                );
+
+                if (!string.IsNullOrWhiteSpace(newTranslation))
+                {
+                    newTranslation = newTranslation.ToLower();
+
+                    if (from == "English" && to == "Georgian")
+                    {
+                        enToKa[input] = newTranslation;
+                        kaToEn[newTranslation] = input;
+
+                        File.AppendAllText(_filePath, $"{input}={newTranslation}\n");
+                    }
+                    else if (from == "Georgian" && to == "English")
+                    {
+                        kaToEn[input] = newTranslation;
+                        enToKa[newTranslation] = input;
+
+                        File.AppendAllText(_filePath, $"{newTranslation}={input}\n");
+                    }
+
+                    lblResult.Text = "Word added!";
+                }
             }
         }
     }

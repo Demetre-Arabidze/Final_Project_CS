@@ -32,8 +32,8 @@
             flpLetters = new FlowLayoutPanel();
             btnRestart = new Button();
             lblAttempts = new Label();
+            btnHint = new Button();
             lblHint = new Label();
-            lblHintText = new Label();
             SuspendLayout();
             // 
             // lblWord
@@ -50,6 +50,7 @@
             // 
             // flpLetters
             // 
+            flpLetters.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             flpLetters.Location = new Point(38, 195);
             flpLetters.Name = "flpLetters";
             flpLetters.Size = new Size(878, 240);
@@ -57,7 +58,7 @@
             // 
             // btnRestart
             // 
-            btnRestart.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnRestart.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnRestart.Location = new Point(38, 529);
             btnRestart.Name = "btnRestart";
             btnRestart.Size = new Size(239, 69);
@@ -69,34 +70,35 @@
             // lblAttempts
             // 
             lblAttempts.AutoSize = true;
-            lblAttempts.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblAttempts.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblAttempts.Location = new Point(12, 9);
             lblAttempts.Name = "lblAttempts";
-            lblAttempts.Size = new Size(166, 46);
+            lblAttempts.Size = new Size(176, 46);
             lblAttempts.TabIndex = 3;
             lblAttempts.Text = "Attempts:";
             lblAttempts.Click += LetterClick;
             // 
+            // btnHint
+            // 
+            btnHint.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnHint.Location = new Point(518, 479);
+            btnHint.Name = "btnHint";
+            btnHint.Size = new Size(218, 58);
+            btnHint.TabIndex = 6;
+            btnHint.Text = "Show Hint";
+            btnHint.UseVisualStyleBackColor = true;
+            btnHint.Click += btnHint_Click;
+            // 
             // lblHint
             // 
             lblHint.AutoSize = true;
-            lblHint.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblHint.Location = new Point(564, 541);
+            lblHint.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblHint.Location = new Point(518, 552);
             lblHint.Name = "lblHint";
-            lblHint.Size = new Size(103, 46);
+            lblHint.Size = new Size(116, 46);
             lblHint.TabIndex = 4;
             lblHint.Text = "(Hint)";
             lblHint.Click += LetterClick;
-            // 
-            // lblHintText
-            // 
-            lblHintText.AutoSize = true;
-            lblHintText.Font = new Font("Segoe UI", 24F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblHintText.Location = new Point(569, 487);
-            lblHintText.Name = "lblHintText";
-            lblHintText.Size = new Size(98, 54);
-            lblHintText.TabIndex = 5;
-            lblHintText.Text = "Hint";
             // 
             // Form1
             // 
@@ -104,7 +106,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             ClientSize = new Size(924, 652);
-            Controls.Add(lblHintText);
+            Controls.Add(btnHint);
             Controls.Add(lblHint);
             Controls.Add(lblAttempts);
             Controls.Add(btnRestart);
@@ -123,7 +125,7 @@
         private FlowLayoutPanel flpLetters;
         private Button btnRestart;
         private Label lblAttempts;
+        private Button btnHint;
         private Label lblHint;
-        private Label lblHintText;
     }
 }

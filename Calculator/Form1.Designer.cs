@@ -45,6 +45,8 @@
             button14 = new Button();
             button15 = new Button();
             button16 = new Button();
+            btnBackspace = new Button();
+            btnDecimal = new Button();
             SuspendLayout();
             // 
             // txtDisplay
@@ -56,7 +58,7 @@
             txtDisplay.Name = "txtDisplay";
             txtDisplay.ReadOnly = true;
             txtDisplay.ScrollBars = ScrollBars.Horizontal;
-            txtDisplay.Size = new Size(551, 75);
+            txtDisplay.Size = new Size(671, 75);
             txtDisplay.TabIndex = 0;
             txtDisplay.Text = "0";
             txtDisplay.TextAlign = HorizontalAlignment.Right;
@@ -164,7 +166,7 @@
             // button10
             // 
             button10.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            button10.Location = new Point(137, 361);
+            button10.Location = new Point(137, 358);
             button10.Name = "button10";
             button10.Size = new Size(130, 87);
             button10.TabIndex = 10;
@@ -177,7 +179,7 @@
             button11.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
             button11.Location = new Point(409, 82);
             button11.Name = "button11";
-            button11.Size = new Size(130, 87);
+            button11.Size = new Size(264, 87);
             button11.TabIndex = 11;
             button11.Text = "C";
             button11.UseVisualStyleBackColor = true;
@@ -186,7 +188,7 @@
             // button12
             // 
             button12.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button12.Location = new Point(273, 361);
+            button12.Location = new Point(542, 268);
             button12.Name = "button12";
             button12.Size = new Size(130, 87);
             button12.TabIndex = 12;
@@ -197,18 +199,18 @@
             // button13
             // 
             button13.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button13.Location = new Point(407, 175);
+            button13.Location = new Point(406, 268);
             button13.Name = "button13";
             button13.Size = new Size(130, 87);
             button13.TabIndex = 13;
-            button13.Text = "*";
+            button13.Text = "X";
             button13.UseVisualStyleBackColor = true;
             button13.Click += Operation_Click;
             // 
             // button14
             // 
             button14.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button14.Location = new Point(1, 358);
+            button14.Location = new Point(542, 358);
             button14.Name = "button14";
             button14.Size = new Size(130, 87);
             button14.TabIndex = 14;
@@ -219,7 +221,7 @@
             // button15
             // 
             button15.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button15.Location = new Point(409, 268);
+            button15.Location = new Point(406, 356);
             button15.Name = "button15";
             button15.Size = new Size(130, 87);
             button15.TabIndex = 15;
@@ -230,7 +232,7 @@
             // button16
             // 
             button16.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button16.Location = new Point(409, 361);
+            button16.Location = new Point(1, 358);
             button16.Name = "button16";
             button16.Size = new Size(130, 87);
             button16.TabIndex = 16;
@@ -238,11 +240,35 @@
             button16.UseVisualStyleBackColor = true;
             button16.Click += btnEquals_Click;
             // 
+            // btnBackspace
+            // 
+            btnBackspace.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnBackspace.Location = new Point(409, 175);
+            btnBackspace.Name = "btnBackspace";
+            btnBackspace.Size = new Size(264, 87);
+            btnBackspace.TabIndex = 17;
+            btnBackspace.Text = "⌫";
+            btnBackspace.UseVisualStyleBackColor = true;
+            btnBackspace.Click += btnBackspace_Click;
+            // 
+            // btnDecimal
+            // 
+            btnDecimal.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnDecimal.Location = new Point(273, 358);
+            btnDecimal.Name = "btnDecimal";
+            btnDecimal.Size = new Size(130, 87);
+            btnDecimal.TabIndex = 18;
+            btnDecimal.Text = ".";
+            btnDecimal.UseVisualStyleBackColor = true;
+            btnDecimal.Click += btnDecimal_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(549, 455);
+            ClientSize = new Size(676, 455);
+            Controls.Add(btnDecimal);
+            Controls.Add(btnBackspace);
             Controls.Add(button16);
             Controls.Add(button15);
             Controls.Add(button14);
@@ -287,5 +313,8 @@
         private Button button16;
 
         #endregion
+
+        private Button btnBackspace;
+        private Button btnDecimal;
     }
 }

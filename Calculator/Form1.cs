@@ -7,7 +7,7 @@ namespace Calculator
             InitializeComponent();
         }
 
-        double firstNumber = 0;
+        decimal firstNumber = 0;
         string operation = "";
         bool isOperationClicked = false;
 
@@ -25,7 +25,7 @@ namespace Calculator
         {
             Button btn = (Button)sender;
 
-            firstNumber = double.Parse(txtDisplay.Text);
+            firstNumber = decimal.Parse(txtDisplay.Text);
             operation = btn.Text;
             isOperationClicked = true;
 
@@ -34,8 +34,8 @@ namespace Calculator
 
         private void btnEquals_Click(object sender, EventArgs e)
         {
-            double secondNumber = double.Parse(txtDisplay.Text);
-            double result = 0;
+            decimal secondNumber = decimal.Parse(txtDisplay.Text);
+            decimal result = 0;
 
             switch (operation)
             {
@@ -52,6 +52,12 @@ namespace Calculator
                     break;
 
                 case "/":
+                    if (secondNumber == 0)
+                    {
+                        MessageBox.Show("Cannot divide by zero!");
+                        txtDisplay.Text = "0";
+                        return;
+                    }
                     result = firstNumber / secondNumber;
                     break;
             }
@@ -75,6 +81,32 @@ namespace Calculator
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnBackspace_Click(object sender, EventArgs e)
+        {
+            if (txtDisplay.Text.Length > 1)
+            {
+                txtDisplay.Text = txtDisplay.Text.Substring(0, txtDisplay.Text.Length - 1);
+            }
+            else
+            {
+                txtDisplay.Text = "0";
+            }
+        }
+
+        private void btnDecimal_Click(object sender, EventArgs e)
+        {
+            if (isOperationClicked)
+            {
+                txtDisplay.Text = "0";
+                isOperationClicked = false;
+            }
+
+            if (!txtDisplay.Text.Contains("."))
+            {
+                txtDisplay.Text += ".";
+            }
         }
     }
 }
