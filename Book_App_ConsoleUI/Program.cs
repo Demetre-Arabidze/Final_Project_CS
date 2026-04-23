@@ -3,7 +3,7 @@ using Book_App.Repositories;
 using Book_App.Services;
 using Book_App.UI;
 
-namespace Book_App
+namespace Book_App_ConsoleUI
 {
     internal class Program
     {

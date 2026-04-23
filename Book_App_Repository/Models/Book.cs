@@ -1,4 +1,4 @@
-﻿using Book_App.Enums;
+﻿using Book_App_Repository.Models.Enums;
 using System.Text.Json.Serialization;
 
 namespace Book_App.Models
@@ -9,13 +9,9 @@ namespace Book_App.Models
         public string Title { get; set; }
         public string Author { get; set; }
         public int Year { get; set; }
-
-        [JsonConverter(typeof(JsonStringEnumConverter))]
         public Genre Genre { get; set; }
-        public List<int> Ratings { get; set; } = new List<int>();
-        public double AverageRating => Ratings.Count == 0 ? 0 : Ratings.Average();
 
-        public Book() { }
+        public List<int> Ratings { get; set; } = new();
 
         public Book(int id, string title, string author, int year, Genre genre)
         {
@@ -26,16 +22,12 @@ namespace Book_App.Models
             Genre = genre;
         }
 
-        public Book(string title, string author, int year)
-        {
-            Title = title;
-            Author = author;
-            Year = year;
-        }
+        public double AverageRating => Ratings.Count == 0 ? 0 : Ratings.Average();
 
         public override string ToString()
         {
-            return $"Id: {Id} | Title: {Title} - Author: {Author}, Year: {Year} | Genre: {Genre} | Rating: {AverageRating:F1}";
+            return $"ID: {Id} | {Title} - {Author} ({Year}) | {Genre} | Rating: {AverageRating:F1}";
         }
     }
 }
+

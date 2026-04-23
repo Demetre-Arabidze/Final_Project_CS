@@ -1,6 +1,6 @@
-﻿using Book_App.Enums;
-using Book_App.Models;
+﻿using Book_App.Models;
 using Book_App.Services;
+using Book_App_Repository.Models.Enums;
 
 namespace Book_App.UI
 {
@@ -17,28 +17,35 @@ namespace Book_App.UI
         {
             while (true)
             {
-                Console.WriteLine("\n--- Book Manager ---");
-                Console.WriteLine("1. Add Book");
-                Console.WriteLine("2. View All Books");
-                Console.WriteLine("3. Search Book");
-                Console.WriteLine("4. Update Book");
-                Console.WriteLine("5. Delete Book");
-                Console.WriteLine("6. Rate Book");
-                Console.WriteLine("7. Exit");
-                Console.Write("Choose option: ");
-
-                string choice = Console.ReadLine();
-
-                switch (choice)
+                try
                 {
-                    case "1": AddBook(); break;
-                    case "2": ShowAllBooks(); break;
-                    case "3": SearchBook(); break;
-                    case "4": UpdateBook(); break;
-                    case "5": DeleteBook(); break;
-                    case "6": RateBook(); break;
-                    case "7": return;
-                    default: Console.WriteLine("Invalid option!"); break;
+                    Console.WriteLine("\n--- Book Manager ---");
+                    Console.WriteLine("1. Add Book");
+                    Console.WriteLine("2. View All Books");
+                    Console.WriteLine("3. Search Book");
+                    Console.WriteLine("4. Update Book");
+                    Console.WriteLine("5. Delete Book");
+                    Console.WriteLine("6. Rate Book");
+                    Console.WriteLine("7. Exit");
+
+                    Console.Write("Choose option: ");
+                    string choice = Console.ReadLine();
+
+                    switch (choice)
+                    {
+                        case "1": AddBook(); break;
+                        case "2": ShowAllBooks(); break;
+                        case "3": SearchBook(); break;
+                        case "4": UpdateBook(); break;
+                        case "5": DeleteBook(); break;
+                        case "6": RateBook(); break;
+                        case "7": return;
+                        default: Console.WriteLine("Invalid option!"); break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Unexpected error: {ex.Message}");
                 }
             }
         }
@@ -54,16 +61,13 @@ namespace Book_App.UI
             int year;
             Console.Write("Year: ");
             while (!int.TryParse(Console.ReadLine(), out year))
-            {
                 Console.WriteLine("Invalid year. Try again:");
-            }
 
             foreach (var g in Enum.GetValues(typeof(Genre)))
-            {
                 Console.WriteLine($"{(int)g} - {g}");
-            }
 
-            Console.Write("Select Genre:");
+            Console.Write("Select Genre: ");
+
             int genreChoice;
             while (!int.TryParse(Console.ReadLine(), out genreChoice) ||
                    !Enum.IsDefined(typeof(Genre), genreChoice))
@@ -73,26 +77,21 @@ namespace Book_App.UI
 
             Genre genre = (Genre)genreChoice;
 
-            var book = new Book(title, author, year)
-            {
-                Genre = genre
-            };
+            var book = new Book(0, title, author, year, genre);
 
-            var success = manager.AddBook(book);
+            manager.AddBook(book);
 
-            Console.WriteLine(success
-                ? "Book added successfully!"
-                : "Book already exists!");
+            Console.WriteLine("Book added successfully!");
         }
 
         private void ShowAllBooks()
         {
             Console.WriteLine("\n--- View All Books ---");
-            Console.WriteLine("1. By ID (Default)");
-            Console.WriteLine("2. By Year (Ascending)");
-            Console.WriteLine("3. By Year (Descending)");
-            Console.WriteLine("4. By Rating (Highest First)");
-            Console.WriteLine("5. By Rating (Lowest First)");
+            Console.WriteLine("1. By ID");
+            Console.WriteLine("2. By Year ASC");
+            Console.WriteLine("3. By Year DESC");
+            Console.WriteLine("4. By Rating DESC");
+            Console.WriteLine("5. By Rating ASC");
             Console.Write("Choose option: ");
 
             string choice = Console.ReadLine();
@@ -110,15 +109,13 @@ namespace Book_App.UI
                 "1" => books.OrderBy(b => b.Id).ToList(),
                 "2" => books.OrderBy(b => b.Year).ToList(),
                 "3" => books.OrderByDescending(b => b.Year).ToList(),
-                "4" => books.OrderByDescending(b => b.Ratings.Any() ? b.Ratings.Average() : 0).ToList(),
-                "5" => books.OrderBy(b => b.Ratings.Any() ? b.Ratings.Average() : 0).ToList(),
+                "4" => books.OrderByDescending(b => b.AverageRating).ToList(),
+                "5" => books.OrderBy(b => b.AverageRating).ToList(),
                 _ => books.OrderBy(b => b.Id).ToList()
             };
 
             foreach (var book in sortedBooks)
-            {
                 Console.WriteLine(book);
-            }
         }
 
         #region
@@ -273,9 +270,7 @@ namespace Book_App.UI
 
             int id;
             while (!int.TryParse(Console.ReadLine(), out id))
-            {
                 Console.WriteLine("Invalid ID. Try again:");
-            }
 
             Console.Write("New Title: ");
             string title = Console.ReadLine();
@@ -286,16 +281,13 @@ namespace Book_App.UI
             int year;
             Console.Write("New Year: ");
             while (!int.TryParse(Console.ReadLine(), out year))
-            {
                 Console.WriteLine("Invalid year. Try again:");
-            }
 
             foreach (var g in Enum.GetValues(typeof(Genre)))
-            {
                 Console.WriteLine($"{(int)g} - {g}");
-            }
 
-            Console.Write("Select Genre:");
+            Console.Write("Select Genre: ");
+
             int genreChoice;
             while (!int.TryParse(Console.ReadLine(), out genreChoice) ||
                    !Enum.IsDefined(typeof(Genre), genreChoice))
@@ -305,14 +297,11 @@ namespace Book_App.UI
 
             Genre genre = (Genre)genreChoice;
 
-            var updatedBook = new Book(title, author, year)
-            {
-                Genre = genre
-            };
+            var updatedBook = new Book(id, title, author, year, genre);
 
             manager.UpdateBook(id, updatedBook);
 
-            Console.WriteLine("Book updated (if it existed).");
+            Console.WriteLine("Book updated successfully!");
         }
 
         private void RateBook()

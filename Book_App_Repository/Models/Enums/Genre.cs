@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Book_App.Enums
+namespace Book_App_Repository.Models.Enums
 {
     public enum Genre
     {

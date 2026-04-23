@@ -1,5 +1,5 @@
-﻿using Book_App.Enums;
-using Book_App.Models;
+﻿using Book_App.Models;
+using Book_App_Repository.Models.Enums;
 
 namespace Book_App.Interfaces
 {
